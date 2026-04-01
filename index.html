@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PH03NIX Grid</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #001f4d, #0a2472);
+      color: gold;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+    input, select, button {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 10px;
+      border: none;
+    }
+    button {
+      background: gold;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .hidden { display: none; }
+    .title {
+      font-size: 40px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .projects {
+      margin-top: 20px;
+    }
+    .project {
+      background: rgba(255,255,255,0.1);
+      padding: 10px;
+      margin: 10px;
+      border-radius: 10px;
+    }
+    .main-banner {
+      font-size: 50px;
+      text-align: center;
+      margin-top: 100px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="login" class="container">
+  <div class="title">PH03NIX GRID</div>
+  <input type="text" id="name" placeholder="Enter your name">
+  <select id="level">
+    <option>Beginner</option>
+    <option>Advanced</option>
+    <option>I don't code</option>
+  </select>
+  <button onclick="login()">Enter</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="container hidden">
+  <h1 id="welcome"></h1>
+  <div class="projects" id="projects"></div>
+  <button onclick="showMainPage()">Go to Main Page</button>
+</div>
+
+<!-- MAIN PAGE -->
+<div id="mainPage" class="hidden">
+  <div class="main-banner">Designed by PH03NIX</div>
+</div>
+
+<script>
+let projects = [
+  "AI Chatbot",
+  "Telegram Bot",
+  "Website Builder"
+];
+
+function login() {
+  const name = document.getElementById('name').value;
+  if (!name) return alert('Enter your name');
+
+  localStorage.setItem('userName', name);
+
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
+
+  document.getElementById('welcome').innerText = 'HEY ' + name;
+
+  loadProjects();
+}
+
+function loadProjects() {
+  const container = document.getElementById('projects');
+  container.innerHTML = '';
+
+  projects.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'project';
+    div.innerText = p;
+    container.appendChild(div);
+  });
+}
+
+function showMainPage() {
+  document.getElementById('dashboard').classList.add('hidden');
+  document.getElementById('mainPage').classList.remove('hidden');
+}
+</script>
+
+</body>
+</html>
