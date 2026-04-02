@@ -1,0 +1,248 @@
+const express = require("express");
+const axios = require("axios");
+
+const app = express();
+app.use(express.json());
+
+const PORT = 3000;
+
+// Simple AI Brain (FREE, no API yet)
+function ph03nixBrain(message) {
+    message = message.toLowerCase();
+
+    if (message.includes("hello")) {
+        return "Hello, I am PH03NIX GRID 🔥";
+    }
+
+    if (message.includes("who are you")) {
+        return "I am your personal AI system created by you.";
+    }
+
+    if (message.includes("time")) {
+        return new Date().toLocaleTimeString();
+    }
+
+    return "I am still learning... but I'm getting smarter 😎";
+}
+
+// API route (this is VERY important)
+app.post("/ai", (req, res) => {
+    const userMessage = req.body.message;
+
+    const reply = ph03nixBrain(userMessage);
+
+    res.json({
+        reply: reply
+    });
+});
+
+// test route
+app.get("/", (req, res) => {
+    res.send("PH03NIX GRID is running 🚀");
+});
+
+app.listen(PORT, () => {
+    console.log(Server running on port ${PORT});
+});
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PH03NIX JARVIS AI</title>
+<style>
+body {
+  margin:0;
+  font-family:'Segoe UI', sans-serif;
+  background:#000010;
+  color:#00f7ff;
+  overflow:hidden;
+}
+
+.container {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  flex-direction:column;
+  text-align:center;
+  transition: opacity 0.5s;
+}
+
+input, select {
+  padding:12px;
+  margin:10px;
+  border-radius:8px;
+  border:1px solid #00f7ff;
+  background:rgba(0,0,0,0.7);
+  color:#00f7ff;
+  width:250px;
+  font-size:16px;
+}
+
+button {
+  padding:12px 25px;
+  margin:10px;
+  border-radius:8px;
+  border:none;
+  background:#00f7ff;
+  color:black;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+  box-shadow:0 0 10px #00f7ff, 0 0 20px #00f7ff inset;
+}
+
+button:hover {
+  background:#00c3cc;
+  box-shadow:0 0 20px #00c3cc, 0 0 30px #00c3cc inset;
+}
+
+.hidden { display:none; opacity:0; }
+
+.chat {
+  width:90%;
+  max-width:600px;
+  height:350px;
+  overflow:auto;
+  background:rgba(0,0,0,0.85);
+  padding:15px;
+  border-radius:10px;
+  border:1px solid #00f7ff;
+  box-shadow:0 0 30px #00f7ff;
+  font-size:16px;
+}
+
+.msg { margin:8px 0; opacity:0; animation: fadeIn 0.5s forwards; }
+@keyframes fadeIn { to { opacity:1; } }
+
+h1,h2 {
+  text-shadow:0 0 15px #00f7ff, 0 0 30px #00f7ff, 0 0 60px #00f7ff;
+  letter-spacing:2px;
+}
+
+input:focus, select:focus { outline:none; border:2px solid #00c3cc; }
+
+button:active { transform:scale(0.97); }
+
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login" class="container">
+  <h1>PH03NIX JARVIS</h1>
+  <input id="name" placeholder="Enter your name">
+  <select id="level">
+    <option>Beginner</option>
+    <option>Advanced</option>
+    <option>I don't code</option>
+  </select>
+  <button type="button" onclick="login()">Enter</button>
+  <button type="button" onclick="showAdminLogin()">Admin</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="container hidden">
+  <h2 id="welcome"></h2>
+  <p id="userLevel"></p>
+  <button type="button" onclick="openAI()">Launch AI</button>
+</div>
+
+<!-- AI PAGE -->
+<div id="aiPage" class="container hidden">
+  <h2>JARVIS CORE</h2>
+  <div class="chat" id="chat"></div>
+  <input id="aiInput" placeholder="Ask anything...">
+  <button type="button" onclick="askAI()">Send</button>
+  <button type="button" onclick="startVoice()">🎤 Speak</button>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div id="adminLogin" class="container hidden">
+  <h2>ADMIN ACCESS</h2>
+  <input type="password" id="adminPass" placeholder="Password">
+  <button type="button" onclick="adminLogin()">Login</button>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel" class="container hidden">
+  <h2>ADMIN PANEL</h2>
+  <p>Welcome, PH03NIX 👑</p>
+</div>
+
+<script>
+let adminPassword = "ph03nix";
+
+// LOGIN
+function login(){
+  let name = document.getElementById('name').value;
+  let level = document.getElementById('level').value;
+  if(!name) return alert("Enter your name");
+
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
+  document.getElementById('welcome').innerText = 'HEY ' + name;
+  document.getElementById('userLevel').innerText = 'Level: ' + level;
+}
+
+// SHOW ADMIN LOGIN
+function showAdminLogin(){
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('adminLogin').classList.remove('hidden');
+}
+
+// ADMIN LOGIN
+function adminLogin(){
+  let pass = document.getElementById('adminPass').value;
+  if(pass === adminPassword){
+    document.getElementById('adminLogin').classList.add('hidden');
+    document.getElementById('adminPanel').classList.remove('hidden');
+  } else { alert('Wrong password'); }
+}
+
+// OPEN AI PAGE
+function openAI(){
+  document.getElementById('dashboard').classList.add('hidden');
+  document.getElementById('aiPage').classList.remove('hidden');
+}
+// ASK AI
+async function askAI(){
+  let input = document.getElementById('aiInput').value;
+  let chat = document.getElementById('chat');
+  if(!input) return;
+  chat.innerHTML += "<div class='msg'><b>You:</b> " + input + "</div>";
+  try {
+    let res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "Authorization":"Bearer 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"
+      },
+      body: JSON.stringify({
+        model:"openai/gpt-3.5-turbo",
+        messages:[{ role:"user", content: input }]
+      })
+    });
+    let data = await res.json();
+    let reply = data.choices[0].message.content;
+    chat.innerHTML += "<div class='msg'><b>JARVIS:</b> " + reply + "</div>";
+    chat.scrollTop = chat.scrollHeight;
+  } catch(err){
+    chat.innerHTML += "<div class='msg'>Connection error</div>";
+  }
+}
+
+// VOICE INPUT
+function startVoice(){
+  let rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  rec.start();
+  rec.onresult = function(e){
+    let text = e.results[0][0].transcript;
+    document.getElementById('aiInput').value = text;
+    askAI();
+  }
+}
+</script>
+
+</body>
+</html>
